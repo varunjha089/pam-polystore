@@ -36,30 +36,47 @@ Information Management System (IMS).
   └──────┬────────┘
          │
          ▼
-  ┌─────────────────────────────────────────────┐
-  │              IMS Pipeline (ims/)            │
-  │                                             │
-  │  QueryInterface  →  TaskAnalyzer            │
-  │       │                  │                  │
-  │  PlanOptimizer  ←  MetadataManager ──────┐  │
-  │       │               (psycopg2)         │  │
-  │  SubqueryDistributor                     │  │
-  │       │  (TileDB slices)                 │  │
-  │  Accumulator  →  result + stats          │  │
-  │                                          │  │
-  └──────────────────────────────────────────┼──┘
-                                             │
-              ┌──────────────────────────────┘
-              ▼
-  ┌──────────────────┐       ┌─────────────────────┐
-  │  PostgreSQL 16   │       │  TileDB dense array  │
-  │  db: pam         │       │  tiledb_store/pam_co │
-  │  • metadata      │       │  dims: time×lat×lon  │
-  │  • coord_axis    │       │  attr: co (float32)  │
-  │  • query_log     │       │  compression: Zstd-5 │
-  │  • grid_flat *   │       └─────────────────────┘
-  └──────────────────┘
-  * grid_flat is the pure-PG contestant used only in benchmarks
+  ┌──────────────────────────────────────────────────────────┐
+  │                    IMS Pipeline (ims/)                   │
+  │                                                          │
+  │  QueryInterface  ──►  TaskAnalyzer                       │
+  │       │                    │                             │
+  │       │            degrees → indices                     │
+  │       │                    │                             │
+  │       ▼                    ▼                             │
+  │  PlanOptimizer  ◄──  MetadataManager  ─────────────────┐ │
+  │       │               (psycopg2 pool)                  │ │
+  │       │  sequential / parallel plan                    │ │
+  │       ▼                                                │ │
+  │  SubqueryDistributor  ── TileDB slices ──►  TileDB     │ │
+  │       │                                                │ │
+  │       ▼                                                │ │
+  │  Accumulator  ──►  result + stats                      │ │
+  │                                                        │ │
+  └────────────────────────────────────────────────────────┼─┘
+                                                           │
+                         ┌─────────────────────────────────┘
+                         │  catalogue lookups + query_log writes
+                         ▼
+            ┌─────────────────────┐       ┌─────────────────────┐
+            │   PostgreSQL 16     │       │  TileDB dense array  │
+            │   db: pam           │       │  tiledb_store/pam_co │
+            │                     │       │                      │
+            │  • metadata         │       │  dims: time×lat×lon  │
+            │  • coord_axis       │       │  attr: co (float32)  │
+            │  • query_log        │       │  tile: 4×90×144      │
+            │                     │       │  compression: Zstd-5 │
+            └─────────────────────┘       └─────────────────────┘
+
+
+  ─ ─ ─ ─ ─ ─ ─ ─ ─  benchmark only (no IMS involvement)  ─ ─ ─ ─ ─ ─ ─ ─ ─
+
+  bench/run_benchmark.py
+       │
+       ├──► psycopg2 ──► grid_flat (314 MB unlogged table, pure-PG contestant)
+       │                  SELECT AVG(value) FROM grid_flat WHERE ...
+       │
+       └──► QueryInterface.execute()  (v2 path, same IMS pipeline as above)
 ```
 
 ---
