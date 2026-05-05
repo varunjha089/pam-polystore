@@ -1,0 +1,838 @@
+{
+  "model": {
+    "alpha_ms_per_cell": 6.792e-05,
+    "beta_ms": 3.2323,
+    "r_squared": 0.609221,
+    "thread_overhead_ms": 5.0,
+    "parallel_threshold_n": 2,
+    "formula": "cost_ms = alpha * area_cells + beta",
+    "n_calibration_points": 55
+  },
+  "data_points": [
+    {
+      "lat_count": 5,
+      "lon_count": 5,
+      "area_cells": 25,
+      "median_ms": 3.3849,
+      "min_ms": 3.2435,
+      "max_ms": 3.8391,
+      "all_ms": [
+        3.8391,
+        3.3312,
+        3.3858,
+        3.3849,
+        3.2435
+      ]
+    },
+    {
+      "lat_count": 5,
+      "lon_count": 10,
+      "area_cells": 50,
+      "median_ms": 3.117,
+      "min_ms": 3.0581,
+      "max_ms": 3.6137,
+      "all_ms": [
+        3.2925,
+        3.0581,
+        3.117,
+        3.0804,
+        3.6137
+      ]
+    },
+    {
+      "lat_count": 10,
+      "lon_count": 5,
+      "area_cells": 50,
+      "median_ms": 3.2737,
+      "min_ms": 3.2358,
+      "max_ms": 3.3127,
+      "all_ms": [
+        3.3077,
+        3.2737,
+        3.2358,
+        3.3127,
+        3.2666
+      ]
+    },
+    {
+      "lat_count": 5,
+      "lon_count": 20,
+      "area_cells": 100,
+      "median_ms": 3.3465,
+      "min_ms": 3.2728,
+      "max_ms": 3.4525,
+      "all_ms": [
+        3.2728,
+        3.4525,
+        3.3465,
+        3.2969,
+        3.4063
+      ]
+    },
+    {
+      "lat_count": 10,
+      "lon_count": 10,
+      "area_cells": 100,
+      "median_ms": 3.2797,
+      "min_ms": 3.2612,
+      "max_ms": 3.3563,
+      "all_ms": [
+        3.2797,
+        3.3407,
+        3.2612,
+        3.2642,
+        3.3563
+      ]
+    },
+    {
+      "lat_count": 20,
+      "lon_count": 5,
+      "area_cells": 100,
+      "median_ms": 3.2768,
+      "min_ms": 3.1965,
+      "max_ms": 3.3716,
+      "all_ms": [
+        3.1965,
+        3.3716,
+        3.3361,
+        3.2745,
+        3.2768
+      ]
+    },
+    {
+      "lat_count": 5,
+      "lon_count": 30,
+      "area_cells": 150,
+      "median_ms": 3.189,
+      "min_ms": 3.1396,
+      "max_ms": 3.2454,
+      "all_ms": [
+        3.1396,
+        3.189,
+        3.2454,
+        3.1974,
+        3.1618
+      ]
+    },
+    {
+      "lat_count": 30,
+      "lon_count": 5,
+      "area_cells": 150,
+      "median_ms": 3.1227,
+      "min_ms": 3.1011,
+      "max_ms": 3.1827,
+      "all_ms": [
+        3.1827,
+        3.1236,
+        3.1227,
+        3.1147,
+        3.1011
+      ]
+    },
+    {
+      "lat_count": 10,
+      "lon_count": 20,
+      "area_cells": 200,
+      "median_ms": 3.1449,
+      "min_ms": 3.0804,
+      "max_ms": 3.2311,
+      "all_ms": [
+        3.1887,
+        3.0804,
+        3.1449,
+        3.1374,
+        3.2311
+      ]
+    },
+    {
+      "lat_count": 20,
+      "lon_count": 10,
+      "area_cells": 200,
+      "median_ms": 3.29,
+      "min_ms": 3.1814,
+      "max_ms": 3.5959,
+      "all_ms": [
+        3.4376,
+        3.29,
+        3.5959,
+        3.2319,
+        3.1814
+      ]
+    },
+    {
+      "lat_count": 45,
+      "lon_count": 5,
+      "area_cells": 225,
+      "median_ms": 3.1697,
+      "min_ms": 3.1308,
+      "max_ms": 3.2536,
+      "all_ms": [
+        3.2536,
+        3.1697,
+        3.1421,
+        3.1308,
+        3.1801
+      ]
+    },
+    {
+      "lat_count": 5,
+      "lon_count": 48,
+      "area_cells": 240,
+      "median_ms": 3.1989,
+      "min_ms": 3.1138,
+      "max_ms": 3.2331,
+      "all_ms": [
+        3.2331,
+        3.1138,
+        3.1246,
+        3.1989,
+        3.2105
+      ]
+    },
+    {
+      "lat_count": 10,
+      "lon_count": 30,
+      "area_cells": 300,
+      "median_ms": 3.358,
+      "min_ms": 3.2875,
+      "max_ms": 3.4858,
+      "all_ms": [
+        3.3053,
+        3.2875,
+        3.358,
+        3.4858,
+        3.4025
+      ]
+    },
+    {
+      "lat_count": 30,
+      "lon_count": 10,
+      "area_cells": 300,
+      "median_ms": 3.5479,
+      "min_ms": 3.4669,
+      "max_ms": 3.6701,
+      "all_ms": [
+        3.6701,
+        3.6185,
+        3.4669,
+        3.5209,
+        3.5479
+      ]
+    },
+    {
+      "lat_count": 5,
+      "lon_count": 72,
+      "area_cells": 360,
+      "median_ms": 3.3636,
+      "min_ms": 3.2349,
+      "max_ms": 3.4485,
+      "all_ms": [
+        3.368,
+        3.3636,
+        3.4485,
+        3.3337,
+        3.2349
+      ]
+    },
+    {
+      "lat_count": 20,
+      "lon_count": 20,
+      "area_cells": 400,
+      "median_ms": 3.2246,
+      "min_ms": 3.1871,
+      "max_ms": 3.2556,
+      "all_ms": [
+        3.2556,
+        3.2246,
+        3.1871,
+        3.2414,
+        3.1943
+      ]
+    },
+    {
+      "lat_count": 45,
+      "lon_count": 10,
+      "area_cells": 450,
+      "median_ms": 3.2523,
+      "min_ms": 3.2086,
+      "max_ms": 3.3743,
+      "all_ms": [
+        3.2514,
+        3.3743,
+        3.2086,
+        3.3023,
+        3.2523
+      ]
+    },
+    {
+      "lat_count": 10,
+      "lon_count": 48,
+      "area_cells": 480,
+      "median_ms": 3.3038,
+      "min_ms": 3.2756,
+      "max_ms": 3.329,
+      "all_ms": [
+        3.329,
+        3.2756,
+        3.3038,
+        3.3226,
+        3.2845
+      ]
+    },
+    {
+      "lat_count": 5,
+      "lon_count": 100,
+      "area_cells": 500,
+      "median_ms": 3.2497,
+      "min_ms": 3.2458,
+      "max_ms": 3.4187,
+      "all_ms": [
+        3.2458,
+        3.2464,
+        3.2497,
+        3.2674,
+        3.4187
+      ]
+    },
+    {
+      "lat_count": 20,
+      "lon_count": 30,
+      "area_cells": 600,
+      "median_ms": 3.346,
+      "min_ms": 3.1847,
+      "max_ms": 3.4331,
+      "all_ms": [
+        3.4331,
+        3.346,
+        3.1847,
+        3.3578,
+        3.1968
+      ]
+    },
+    {
+      "lat_count": 30,
+      "lon_count": 20,
+      "area_cells": 600,
+      "median_ms": 3.2554,
+      "min_ms": 3.2341,
+      "max_ms": 3.3243,
+      "all_ms": [
+        3.3131,
+        3.2554,
+        3.2354,
+        3.3243,
+        3.2341
+      ]
+    },
+    {
+      "lat_count": 5,
+      "lon_count": 144,
+      "area_cells": 720,
+      "median_ms": 3.2925,
+      "min_ms": 3.2355,
+      "max_ms": 3.3601,
+      "all_ms": [
+        3.3601,
+        3.3028,
+        3.2925,
+        3.2355,
+        3.272
+      ]
+    },
+    {
+      "lat_count": 10,
+      "lon_count": 72,
+      "area_cells": 720,
+      "median_ms": 3.2398,
+      "min_ms": 3.1438,
+      "max_ms": 3.3049,
+      "all_ms": [
+        3.1438,
+        3.1591,
+        3.3049,
+        3.285,
+        3.2398
+      ]
+    },
+    {
+      "lat_count": 30,
+      "lon_count": 30,
+      "area_cells": 900,
+      "median_ms": 3.2146,
+      "min_ms": 3.2064,
+      "max_ms": 3.2852,
+      "all_ms": [
+        3.2064,
+        3.2852,
+        3.2146,
+        3.2725,
+        3.2119
+      ]
+    },
+    {
+      "lat_count": 45,
+      "lon_count": 20,
+      "area_cells": 900,
+      "median_ms": 3.345,
+      "min_ms": 3.2777,
+      "max_ms": 3.3526,
+      "all_ms": [
+        3.2909,
+        3.3526,
+        3.345,
+        3.349,
+        3.2777
+      ]
+    },
+    {
+      "lat_count": 20,
+      "lon_count": 48,
+      "area_cells": 960,
+      "median_ms": 3.1809,
+      "min_ms": 3.1624,
+      "max_ms": 3.2323,
+      "all_ms": [
+        3.1969,
+        3.1809,
+        3.2323,
+        3.1703,
+        3.1624
+      ]
+    },
+    {
+      "lat_count": 5,
+      "lon_count": 200,
+      "area_cells": 1000,
+      "median_ms": 3.3249,
+      "min_ms": 3.2933,
+      "max_ms": 3.4519,
+      "all_ms": [
+        3.3249,
+        3.2933,
+        3.4519,
+        3.3239,
+        3.3304
+      ]
+    },
+    {
+      "lat_count": 10,
+      "lon_count": 100,
+      "area_cells": 1000,
+      "median_ms": 3.2523,
+      "min_ms": 3.1916,
+      "max_ms": 3.2964,
+      "all_ms": [
+        3.242,
+        3.2523,
+        3.2964,
+        3.1916,
+        3.2611
+      ]
+    },
+    {
+      "lat_count": 45,
+      "lon_count": 30,
+      "area_cells": 1350,
+      "median_ms": 3.1353,
+      "min_ms": 3.08,
+      "max_ms": 3.2059,
+      "all_ms": [
+        3.1353,
+        3.1173,
+        3.1765,
+        3.08,
+        3.2059
+      ]
+    },
+    {
+      "lat_count": 5,
+      "lon_count": 288,
+      "area_cells": 1440,
+      "median_ms": 3.4097,
+      "min_ms": 3.3371,
+      "max_ms": 3.4605,
+      "all_ms": [
+        3.3975,
+        3.4605,
+        3.4542,
+        3.4097,
+        3.3371
+      ]
+    },
+    {
+      "lat_count": 10,
+      "lon_count": 144,
+      "area_cells": 1440,
+      "median_ms": 3.2186,
+      "min_ms": 3.136,
+      "max_ms": 3.2573,
+      "all_ms": [
+        3.2186,
+        3.136,
+        3.2303,
+        3.1706,
+        3.2573
+      ]
+    },
+    {
+      "lat_count": 20,
+      "lon_count": 72,
+      "area_cells": 1440,
+      "median_ms": 3.5069,
+      "min_ms": 3.4547,
+      "max_ms": 3.5917,
+      "all_ms": [
+        3.5192,
+        3.5069,
+        3.5917,
+        3.4922,
+        3.4547
+      ]
+    },
+    {
+      "lat_count": 30,
+      "lon_count": 48,
+      "area_cells": 1440,
+      "median_ms": 3.2262,
+      "min_ms": 3.1627,
+      "max_ms": 3.5004,
+      "all_ms": [
+        3.5004,
+        3.3153,
+        3.2262,
+        3.1864,
+        3.1627
+      ]
+    },
+    {
+      "lat_count": 5,
+      "lon_count": 400,
+      "area_cells": 2000,
+      "median_ms": 3.9705,
+      "min_ms": 3.9326,
+      "max_ms": 4.0182,
+      "all_ms": [
+        3.969,
+        3.9705,
+        4.0182,
+        3.9326,
+        3.9947
+      ]
+    },
+    {
+      "lat_count": 10,
+      "lon_count": 200,
+      "area_cells": 2000,
+      "median_ms": 3.5213,
+      "min_ms": 3.4449,
+      "max_ms": 3.5443,
+      "all_ms": [
+        3.5213,
+        3.4449,
+        3.5443,
+        3.5239,
+        3.4552
+      ]
+    },
+    {
+      "lat_count": 20,
+      "lon_count": 100,
+      "area_cells": 2000,
+      "median_ms": 3.1818,
+      "min_ms": 3.1192,
+      "max_ms": 3.2453,
+      "all_ms": [
+        3.2232,
+        3.1818,
+        3.2453,
+        3.1219,
+        3.1192
+      ]
+    },
+    {
+      "lat_count": 30,
+      "lon_count": 72,
+      "area_cells": 2160,
+      "median_ms": 3.1709,
+      "min_ms": 3.1128,
+      "max_ms": 3.1831,
+      "all_ms": [
+        3.1709,
+        3.1831,
+        3.1128,
+        3.1229,
+        3.175
+      ]
+    },
+    {
+      "lat_count": 45,
+      "lon_count": 48,
+      "area_cells": 2160,
+      "median_ms": 3.1809,
+      "min_ms": 3.1275,
+      "max_ms": 3.2706,
+      "all_ms": [
+        3.2367,
+        3.1752,
+        3.2706,
+        3.1275,
+        3.1809
+      ]
+    },
+    {
+      "lat_count": 5,
+      "lon_count": 576,
+      "area_cells": 2880,
+      "median_ms": 3.8298,
+      "min_ms": 3.8177,
+      "max_ms": 3.8455,
+      "all_ms": [
+        3.8213,
+        3.8177,
+        3.8298,
+        3.8391,
+        3.8455
+      ]
+    },
+    {
+      "lat_count": 10,
+      "lon_count": 288,
+      "area_cells": 2880,
+      "median_ms": 3.4446,
+      "min_ms": 3.3936,
+      "max_ms": 3.5612,
+      "all_ms": [
+        3.3936,
+        3.439,
+        3.4447,
+        3.5612,
+        3.4446
+      ]
+    },
+    {
+      "lat_count": 20,
+      "lon_count": 144,
+      "area_cells": 2880,
+      "median_ms": 3.2359,
+      "min_ms": 3.1852,
+      "max_ms": 3.2531,
+      "all_ms": [
+        3.1932,
+        3.1852,
+        3.2359,
+        3.2396,
+        3.2531
+      ]
+    },
+    {
+      "lat_count": 30,
+      "lon_count": 100,
+      "area_cells": 3000,
+      "median_ms": 3.2674,
+      "min_ms": 3.133,
+      "max_ms": 3.5911,
+      "all_ms": [
+        3.2674,
+        3.206,
+        3.133,
+        3.3162,
+        3.5911
+      ]
+    },
+    {
+      "lat_count": 45,
+      "lon_count": 72,
+      "area_cells": 3240,
+      "median_ms": 3.2536,
+      "min_ms": 3.1789,
+      "max_ms": 3.2787,
+      "all_ms": [
+        3.1789,
+        3.2653,
+        3.2787,
+        3.2514,
+        3.2536
+      ]
+    },
+    {
+      "lat_count": 10,
+      "lon_count": 400,
+      "area_cells": 4000,
+      "median_ms": 3.9159,
+      "min_ms": 3.8801,
+      "max_ms": 3.9713,
+      "all_ms": [
+        3.9195,
+        3.9159,
+        3.8843,
+        3.9713,
+        3.8801
+      ]
+    },
+    {
+      "lat_count": 20,
+      "lon_count": 200,
+      "area_cells": 4000,
+      "median_ms": 3.4271,
+      "min_ms": 3.3902,
+      "max_ms": 3.4659,
+      "all_ms": [
+        3.4659,
+        3.4108,
+        3.4571,
+        3.3902,
+        3.4271
+      ]
+    },
+    {
+      "lat_count": 30,
+      "lon_count": 144,
+      "area_cells": 4320,
+      "median_ms": 3.2766,
+      "min_ms": 3.2082,
+      "max_ms": 3.3383,
+      "all_ms": [
+        3.2766,
+        3.2642,
+        3.3077,
+        3.3383,
+        3.2082
+      ]
+    },
+    {
+      "lat_count": 45,
+      "lon_count": 100,
+      "area_cells": 4500,
+      "median_ms": 3.1566,
+      "min_ms": 3.1474,
+      "max_ms": 3.2604,
+      "all_ms": [
+        3.1561,
+        3.2009,
+        3.2604,
+        3.1566,
+        3.1474
+      ]
+    },
+    {
+      "lat_count": 10,
+      "lon_count": 576,
+      "area_cells": 5760,
+      "median_ms": 3.839,
+      "min_ms": 3.8214,
+      "max_ms": 3.8684,
+      "all_ms": [
+        3.8684,
+        3.8214,
+        3.8433,
+        3.839,
+        3.8346
+      ]
+    },
+    {
+      "lat_count": 20,
+      "lon_count": 288,
+      "area_cells": 5760,
+      "median_ms": 3.3421,
+      "min_ms": 3.2871,
+      "max_ms": 3.461,
+      "all_ms": [
+        3.3298,
+        3.3563,
+        3.461,
+        3.2871,
+        3.3421
+      ]
+    },
+    {
+      "lat_count": 30,
+      "lon_count": 200,
+      "area_cells": 6000,
+      "median_ms": 3.4216,
+      "min_ms": 3.3347,
+      "max_ms": 3.4939,
+      "all_ms": [
+        3.4939,
+        3.4507,
+        3.4216,
+        3.3347,
+        3.3984
+      ]
+    },
+    {
+      "lat_count": 20,
+      "lon_count": 400,
+      "area_cells": 8000,
+      "median_ms": 4.115,
+      "min_ms": 3.7251,
+      "max_ms": 4.1625,
+      "all_ms": [
+        3.7251,
+        3.9192,
+        4.115,
+        4.1462,
+        4.1625
+      ]
+    },
+    {
+      "lat_count": 30,
+      "lon_count": 288,
+      "area_cells": 8640,
+      "median_ms": 3.7251,
+      "min_ms": 3.6635,
+      "max_ms": 3.8425,
+      "all_ms": [
+        3.6635,
+        3.8425,
+        3.7599,
+        3.6743,
+        3.7251
+      ]
+    },
+    {
+      "lat_count": 20,
+      "lon_count": 576,
+      "area_cells": 11520,
+      "median_ms": 4.1942,
+      "min_ms": 4.1733,
+      "max_ms": 4.2737,
+      "all_ms": [
+        4.1991,
+        4.1942,
+        4.1733,
+        4.179,
+        4.2737
+      ]
+    },
+    {
+      "lat_count": 30,
+      "lon_count": 400,
+      "area_cells": 12000,
+      "median_ms": 4.2444,
+      "min_ms": 4.1201,
+      "max_ms": 4.3495,
+      "all_ms": [
+        4.3495,
+        4.2444,
+        4.2716,
+        4.1201,
+        4.2398
+      ]
+    },
+    {
+      "lat_count": 30,
+      "lon_count": 576,
+      "area_cells": 17280,
+      "median_ms": 4.2487,
+      "min_ms": 4.2277,
+      "max_ms": 4.4337,
+      "all_ms": [
+        4.2277,
+        4.2487,
+        4.4337,
+        4.2963,
+        4.2451
+      ]
+    }
+  ]
+}

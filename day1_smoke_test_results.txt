@@ -1,0 +1,15 @@
+=== Test 1: single time, full grid ===
+shape: [361, 576]
+mean: 0.0004977370263077319
+trace: {'stages': [{'stage': 'analyze', 'task_type': 'single_time'}, {'stage': 'plan', 'strategy': 'sequential', 'n_subqueries': 1, 'n_pruned': 0}, {'stage': 'distribute', 'timings_ms': [{'time_step': '201901', 'ms': 20.76}]}], 'total_ms': 26.77}
+
+=== Test 2: single time, regional (India-ish) ===
+shape: [55, 47]
+mean: 0.0005859299562871456
+trace: {'stages': [{'stage': 'analyze', 'task_type': 'single_time'}, {'stage': 'plan', 'strategy': 'sequential', 'n_subqueries': 1, 'n_pruned': 0}, {'stage': 'distribute', 'timings_ms': [{'time_step': '201901', 'ms': 3.49}]}], 'total_ms': 7.32}
+
+=== Test 3: time range, regional (parallel path) ===
+shape: [6, 55, 47]
+time_steps: ['201901', '201902', '201903', '201904', '201905', '201906']
+strategy: parallel
+total_ms: 35.95

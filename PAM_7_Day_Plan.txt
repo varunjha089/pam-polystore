@@ -1,0 +1,308 @@
+================================================================================
+PAM POLYSTORE PROJECT — 7-DAY PLAN
+Polystore-Based Query System for Multidimensional Scientific Climate Data
+Reference paper: He et al., CIBDA 2024
+================================================================================
+
+GROUND RULES (apply every day)
+------------------------------------------------------------------------
+- v1 (~/Project, .npy + PostgreSQL) stays untouched and running on port 80,
+  served at http://3.214.214.232/. It is the live demo for the teacher.
+- v2 lives entirely in ~/claude_db_project/ with its own venv. v2 will be
+  served on a DIFFERENT port (8001) so both can run side by side.
+- No systemctl edits to v1 services this week. The live demo never goes
+  down. We only swap to v2 on Day 7 once everything is verified.
+- Every day produces: code commits + a short progress note + smoke tests
+  that show what was added that day still works.
+- When in doubt about scope, prefer "honest demo of one feature" over
+  "half-broken implementation of three features".
+
+================================================================================
+DAY 1 — DONE (foundation)
+================================================================================
+[x] Migrated 16 .npy files into a unified TileDB array
+    tiledb_store/pam_co  (time=16, lat=361, lon=576), tile (4,90,144), ZSTD-5.
+[x] Expanded PostgreSQL schema:
+      metadata           — 19 columns incl. spatial bounds, units, stats
+      coord_axis         — 937 rows mapping array index <-> degree value
+      query_log          — for benchmark + UI plan-trace persistence
+      metadata_v1_legacy — preserved 16 rows for Day 5 baselines
+[x] Built the 6-module IMS (Integrated Management System):
+      QueryInterface, MetadataManager, TaskAnalyzer,
+      PlanOptimizer, SubqueryDistributor, Accumulator
+[x] Two API endpoints on api.py:
+      GET  /query        — legacy index-based, v1-compatible
+      POST /ims/query    — new, degree+date based, returns _trace
+[x] Smoke tests passed:
+      single-time global    27.83 ms (TileDB 20.55)
+      single-time regional   7.32 ms (TileDB  3.49)  -> 5-6x speedup
+      6-month range parallel 35.95 ms
+[x] Storage: 13 MB (.npy) -> 11 MB (TileDB+ZSTD), -15 percent
+[x] Day 1 changelog PDF (10 pages) including supervisor-question appendix.
+
+================================================================================
+DAY 2 — UI rewrite + query DSL + run v2 alongside v1
+================================================================================
+GOAL
+  - Have a NEW Streamlit app at port 8502 that talks to the v2 IMS.
+  - v1 keeps running, untouched, at port 80. Nothing on v1 is restarted.
+  - Teacher can be shown both: v1 = "what we had", v2 = "what it became".
+
+DELIVERABLES
+  1. A v2 Streamlit app: ~/claude_db_project/app_v2.py
+       - Sliders use DEGREES (lat -90..90, lon -180..180), not indices.
+       - Time control supports BOTH single date AND date range.
+       - Three tabs: Heatmap, Geographic CO Map, Query Plan (NEW).
+       - Query Plan tab shows the IMS _trace live, stage by stage.
+       - When a time range is selected, an additional 'Time Series' panel
+         shows mean CO over the region across the selected months.
+
+  2. A FastAPI v2 service on port 8001 (separate from v1's port 8000).
+       Run it manually for now (not as systemd):
+            uvicorn api:app --host 0.0.0.0 --port 8001
+       Verify: curl http://localhost:8001/ims/health
+
+  3. The unified query DSL formally defined as a Pydantic model.
+       Documented in docs/query_dsl.md — 1 page, with 5 example queries.
+
+  4. Open the EC2 security group / nginx rule so port 8502 is reachable from
+     the internet. (Or simpler: SSH-tunnel for the demo.) v2 URL becomes
+            http://3.214.214.232:8502/
+     v1 stays on http://3.214.214.232/.
+
+  5. Day 2 progress note (~/claude_db_project/PROGRESS_DAY2.md).
+
+ACCEPTANCE TESTS
+  - Open v1 URL: works exactly as before (untouched).
+  - Open v2 URL: same data, but with degrees, time-range, and trace panel.
+  - Query Plan tab on v2 shows total_ms, per-stage timings, strategy
+    chosen (sequential vs parallel), n_pruned, n_subqueries.
+  - 6-month range query renders a time-series chart with 6 data points.
+
+RISK
+  - EC2 security group might block port 8502. Fallback: SSH tunnel or use
+    Streamlit's public URL feature.
+
+================================================================================
+DAY 3 — Real query splitting and parallel execution
+================================================================================
+GOAL
+  Make the IMS actually do polystore-shaped work, not just route queries
+  through stub modules.
+
+DELIVERABLES
+  1. PlanOptimizer cost model v0 (~/claude_db_project/ims/plan_optimizer.py):
+       - Per sub-query, estimate cost as
+             pg_lookup_cost + tiledb_io_cost + python_overhead
+         using metadata.data_min/max for selectivity hints.
+       - Choose strategy (sequential | parallel | streaming) based on the
+         estimate, not just on a hard sub-query-count threshold.
+
+  2. SubqueryDistributor:
+       - Add a streaming path for big results (chunked yield, not a single
+         np.stack at the end). Used when estimated payload > 50 MB.
+       - Add per-thread connection in the parallel path so the connection
+         pool is actually exercised.
+
+  3. Logging: every IMS execution writes one row into query_log with
+     query_json, plan_json, pg_time_ms, array_time_ms, total_time_ms,
+     result_shape, n_files_pruned. Used by Day 5 benchmarks.
+
+  4. New endpoint POST /ims/explain:
+       - Takes the same query body as /ims/query.
+       - Returns ONLY the plan, never executes. (Like SQL EXPLAIN.)
+       - Wire this into the Query Plan tab so users can preview cost
+         before running a heavy query.
+
+ACCEPTANCE TESTS
+  - 12-month range query fans out parallel and reports per-thread timings.
+  - /ims/explain returns a plan in <5 ms with no array I/O.
+  - query_log fills up: SELECT count(*) FROM query_log shows growth.
+
+================================================================================
+DAY 4 — Metadata-driven file pruning + multi-parameter
+================================================================================
+GOAL
+  The relational DB earns its place by SKIPPING work the array DB would
+  otherwise do. This is the most important "polystore wins" demo.
+
+DELIVERABLES
+  1. Per-tile spatial bounds in metadata. Not just per-file (which is
+     global anyway for MERRA-2). Add a metadata_tile table:
+          (parameter, time_step, tile_id, lat_min, lat_max, lon_min, lon_max)
+     populated by a one-shot script. The PlanOptimizer queries this to
+     skip tiles whose bounds don't overlap the query region.
+
+  2. Multi-parameter TileDB array. Right now we have one TileDB array
+     per parameter (CO only, in pam_co). Add COSC, COEM, TO3:
+       Option A (chosen for time): one TileDB array per parameter,
+                                   metadata.parameter routes correctly.
+       Option B (deferred):       single TileDB array with parameter as
+                                   a 4th dimension. Cleaner but more work.
+
+  3. New /ims/query parameter list:
+       parameter: "COCL" | "COSC" | "COEM" | "TO3"
+       Multi-parameter join example query: "give me CO and TO3 over
+         India in Jan 2019".  IMS distributor fans out to BOTH arrays
+         in parallel.
+
+  4. Simple Redis cache layer (in-memory dict if Redis is too much):
+       key  = sha1(plan_json)
+       val  = result + timestamp
+       TTL  = 5 minutes
+     Hit-rate is logged. Day 5 can show cached vs uncached numbers.
+
+ACCEPTANCE TESTS
+  - Regional query reports n_pruned > 0 in the trace.
+  - Multi-parameter query returns dict with keys per parameter, all
+    sub-queries timestamped in the trace.
+  - Re-running the same query within 5 minutes is < 1 ms (cache hit).
+
+================================================================================
+DAY 5 — THREE-WAY BENCHMARK
+================================================================================
+GOAL
+  Real numbers comparing the alternatives. This is the headline result for
+  the paper rewrite on Day 7.
+
+DELIVERABLES
+  1. Build a fourth baseline ("flattened PostgreSQL") that the paper hints
+     at but never had:
+       CREATE TABLE grid_flat (
+         time_step VARCHAR(6), lat REAL, lon REAL,
+         parameter VARCHAR(16), value REAL);
+     Insert all 16 months x 361 x 576 = ~3.3M rows for COCL.
+     CREATE INDEX on (time_step, lat, lon).
+     Time and report row count, table size, index size.
+
+  2. Benchmark harness scripts/run_benchmarks.py:
+       Workloads:
+         W1: single-time global       (16 queries, one per month)
+         W2: single-time regional     (16 queries, India bbox each)
+         W3: time-range regional      (1 query, all 16 months, India)
+         W4: aggregations             (mean over region, all months)
+         W5: multi-parameter          (Day 4 feature; CO + TO3)
+       For each: latency p50/p95, throughput, storage cost.
+       Run on three systems: v1 (.npy), flattened-PG, v2 (polystore).
+       Output: docs/benchmarks.csv + bench_plots/*.png
+
+  3. One-page benchmark report: docs/benchmarks_summary.md
+     With ONE clear table that goes into the paper.
+
+ACCEPTANCE TESTS
+  - All 5 workloads complete on all 3 systems (v2 may be fastest, but
+    note honestly if any v1 case wins — small queries on cached pages
+    can favor .npy).
+  - Storage row in summary table shows v2 < v1 < flattened-PG.
+
+RISKS
+  - Flattening 3.3M rows can take a while; do it once, not per workload.
+  - The t3.medium burstable CPU credits can run out. Plan: switch to
+    "unlimited" credits in EC2 console for the bench runs only.
+
+================================================================================
+DAY 6 — UI polish, demo prep, observability
+================================================================================
+GOAL
+  Make v2 demo-ready. Reviewers and the teacher should be able to see
+  the polystore working from the UI alone — no terminal needed.
+
+DELIVERABLES
+  1. Streamlit Query Plan tab v2:
+       - Visual pipeline (small Mermaid or SVG diagram) where each IMS
+         stage lights up as it runs, with elapsed ms shown.
+       - A "Recent queries" widget pulling from query_log.
+
+  2. New Streamlit tab: "Storage Layout"
+       - Bar chart of storage size: v1, flattened-PG, v2.
+       - Pie chart: where time was spent (PG / TileDB / Python).
+       - Reads numbers from Day 5 CSV, no live computation.
+
+  3. New Streamlit tab: "Compare Architectures" (optional, if time)
+       - Side-by-side run of the same query through v1 and v2.
+       - Show timings in real time.
+
+  4. Polishing pass:
+       - Replace any debug prints with proper logging.
+       - Make sure the EC2-public v2 URL works for at least 60 minutes
+         of demo usage (i.e., no transient 502s).
+       - Default UI region centered on India so the first screenshot is
+         interesting (not all blue ocean).
+
+  5. Demo script: docs/demo_walkthrough.md
+       60-second version, 3-minute version, 10-minute version.
+       Each tells the story: problem -> v1 limits -> v2 architecture ->
+       benchmark numbers -> live query.
+
+ACCEPTANCE TESTS
+  - Open v2 URL in a fresh browser, do a regional query: every panel
+    populates without errors.
+  - Query Plan animation completes in under 100 ms for a typical query.
+
+================================================================================
+DAY 7 — PAPER REWRITE + FINAL CUTOVER
+================================================================================
+GOAL
+  Update the project paper with the v2 architecture, IMS section, and
+  benchmark numbers. Optional cutover to make v2 the live demo.
+
+DELIVERABLES
+  1. Paper rewrite (.docx and PDF):
+       Sections to update or add:
+         Abstract       — replace "PostgreSQL + NumPy" with
+                          "PostgreSQL + TileDB" and mention IMS.
+         System Architecture — replace Figure 1 with the new v2 diagram
+                          (page 8 of the changelog PDF is a starting point).
+         New Section: Integrated Management System
+                          (architecture, modules, query lifecycle).
+         New Section: Justification for Polystore
+                          (the "why an array DB" appendix from the
+                          changelog, expanded with citations).
+         Methodology    — update for TileDB, coord_axis, IMS pipeline.
+         New Section: Benchmark Evaluation
+                          (the Day 5 numbers, with the summary table).
+         Limitations    — refresh; honest list of deferred items.
+         Conclusion     — refresh; emphasize what was demonstrated.
+
+  2. Updated reference list to include:
+         Papadopoulos et al. 2016 (TileDB)
+         Stonebraker SciDB
+         BigDAWG papers
+         The He et al. CIBDA 2024 reference paper
+
+  3. Final smoke pass on the live URL.
+
+  4. Optional: Day-7-evening cutover.
+       Edit the systemd unit so the live URL points to v2 on port 80.
+       Snapshot the EBS volume first. v1 stays one rollback away.
+       If the demo is the same day or close, DO NOT do the cutover —
+       keep v1 live and demo v2 on the alternate port.
+
+ACCEPTANCE TESTS
+  - Paper compiles, references resolve.
+  - Live demo URL shows the agreed system (v1 by default, v2 if cutover
+    decided to be safe).
+
+================================================================================
+RUNNING-COSTS WATCH
+================================================================================
+- EC2 t3.medium: ~$0.04/hr on-demand. Keep stopped overnight if possible.
+- EBS 50 GB: ~$5/month. Don't grow it without a reason.
+- Data transfer is the silent cost. Avoid public-egress benchmark loops.
+- No paid services are required for any day above (Redis is optional and
+  can be replaced by a Python dict; TileDB is open source).
+
+================================================================================
+WHAT WE WILL NOT DO THIS WEEK
+================================================================================
+- No Kubernetes, no Docker. Plain venv + systemd is enough.
+- No distributed TileDB cluster. Single-node is fine for the data size.
+- No SciDB / Rasdaman swap-out. TileDB is the chosen array DB; defending
+  the choice is enough, evaluating alternatives is a separate paper.
+- No real-time ingestion. Dataset is static; daily-build is fine.
+- No authentication. Public read-only demo. Never put real credentials
+  on this box.
+
+================================================================================
+END OF PLAN
+================================================================================

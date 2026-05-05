@@ -1,0 +1,19 @@
+query_id,query_label,arch,median_ms,min_ms,max_ms,mean_ms,mean_value,correctness_spread,correctness_ok
+Q1_point,"single cell, single time",v1,16.18,15.0,18.17,16.31,0.000600695,0.0,True
+Q1_point,"single cell, single time",pure_pg,16.1,15.98,16.4,16.14,0.000600695,0.0,True
+Q1_point,"single cell, single time",v2,42.81,42.2,44.72,43.19,0.000600695,0.0,True
+Q2_small_region,"India, single month",v1,16.09,15.55,16.49,16.06,0.00058593,0.0,True
+Q2_small_region,"India, single month",pure_pg,22.72,22.53,23.61,22.83,0.00058593,0.0,True
+Q2_small_region,"India, single month",v2,49.8,49.42,50.46,49.81,0.00058593,0.0,True
+Q3_large_region,"Asia, single month",v1,16.21,15.36,17.18,16.21,0.000609815,0.0,True
+Q3_large_region,"Asia, single month",pure_pg,32.76,32.4,33.52,32.86,0.000609815,0.0,True
+Q3_large_region,"Asia, single month",v2,87.89,87.0,89.72,88.1,0.000609815,0.0,True
+Q4_range_region,"India, 6 months",v1,21.48,21.09,22.99,21.74,0.000540854,0.0,True
+Q4_range_region,"India, 6 months",pure_pg,55.24,54.89,56.11,55.28,0.000540854,0.0,True
+Q4_range_region,"India, 6 months",v2,106.15,104.33,108.9,106.29,0.000540854,0.0,True
+Q5_global,"full grid, single month",v1,18.58,18.37,19.18,18.68,0.000497737,0.0,True
+Q5_global,"full grid, single month",pure_pg,67.13,66.68,67.64,67.1,0.000497737,0.0,True
+Q5_global,"full grid, single month",v2,572.74,570.92,580.93,573.6,0.000497737,0.0,True
+Q6_timeseries_pt,"single cell, all 16 months",v1,29.42,28.5,30.54,29.41,0.000597454,0.0,True
+Q6_timeseries_pt,"single cell, all 16 months",pure_pg,16.15,15.99,16.22,16.13,0.000597454,0.0,True
+Q6_timeseries_pt,"single cell, all 16 months",v2,102.03,99.14,106.67,102.14,0.000597454,0.0,True
