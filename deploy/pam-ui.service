@@ -1,0 +1,21 @@
+[Unit]
+Description=PAM Polystore — Streamlit v2 UI
+After=network.target pam-api.service
+Wants=pam-api.service
+
+[Service]
+User=ubuntu
+WorkingDirectory=/home/ubuntu/claude_db_project
+ExecStart=/home/ubuntu/.local/bin/streamlit run app_v2.py \
+          --server.port 8502 \
+          --server.address 0.0.0.0 \
+          --server.headless true \
+          --server.enableCORS false \
+          --server.enableXsrfProtection false
+Restart=always
+RestartSec=5
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target

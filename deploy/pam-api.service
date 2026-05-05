@@ -1,0 +1,17 @@
+[Unit]
+Description=PAM Polystore — FastAPI v2 (IMS + TileDB)
+After=network.target postgresql.service
+Wants=postgresql.service
+
+[Service]
+User=ubuntu
+WorkingDirectory=/home/ubuntu/claude_db_project
+ExecStart=/home/ubuntu/claude_db_project/venv/bin/uvicorn api:app \
+          --host 0.0.0.0 --port 8001 --log-level info
+Restart=always
+RestartSec=5
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target
