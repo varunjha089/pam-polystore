@@ -1,0 +1,34 @@
+# PAM Polystore — Python dependencies
+# Install with: pip install -r requirements.txt
+#
+# System libraries required BEFORE pip install (see README.md §2):
+#   sudo apt-get install -y libproj-dev proj-data proj-bin libgeos-dev libgeos++-dev
+
+# ── Web API ────────────────────────────────────────────────────────────────────
+fastapi==0.125.0
+uvicorn==0.46.0
+pydantic==1.10.26
+python-dotenv==1.2.2
+
+# ── Database ───────────────────────────────────────────────────────────────────
+psycopg2-binary==2.9.12
+
+# ── Array store ────────────────────────────────────────────────────────────────
+tiledb==0.36.1
+
+# ── Scientific computing ───────────────────────────────────────────────────────
+numpy==2.2.6
+pandas==2.3.3
+xarray==2025.6.1
+netCDF4==1.7.4
+
+# ── Visualisation (Streamlit UI + calibration plots) ──────────────────────────
+matplotlib==3.10.9
+cartopy==0.25.0
+requests==2.33.1
+
+# ── Streamlit (install separately — see README.md §2) ─────────────────────────
+# streamlit==1.56.0
+# Streamlit pulls in many heavy transitive deps that conflict with pydantic v1.
+# Install it in isolation:
+#   pip install streamlit==1.56.0
